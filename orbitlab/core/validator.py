@@ -1,10 +1,10 @@
-# orbit/core/validator.py
+# orbitlab/core/validator.py
 
 import dill # type: ignore
 from pathlib import Path
 from typing import Optional, Callable, Dict, Any, List, Union
-from orbit.core.crypto import decrypt_hybrid, validar_firma
-from orbit.core.utils import log_message
+from orbitlab.core.crypto import decrypt_hybrid, validar_firma
+from orbitlab.core.utils import log_message
 
 class OrbitValidator:
     """

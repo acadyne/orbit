@@ -1,11 +1,11 @@
-# orbit/adapters/security.py
+# orbitlab/adapters/security.py
 
 from typing import Dict, Any, cast
 from Crypto.PublicKey import RSA
-from orbit.adapters.base import BaseProjectAdapter
+from orbitlab.adapters.base import BaseProjectAdapter
 from cross_crypto_py.encrypt import encryptHybrid  # type: ignore
 from cross_crypto_py.decrypt import decryptHybrid  # type: ignore
-from orbit.core.utils import log_message
+from orbitlab.core.utils import log_message
 
 
 class HybridSecurityAdapter(BaseProjectAdapter):

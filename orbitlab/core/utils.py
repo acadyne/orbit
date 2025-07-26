@@ -1,4 +1,4 @@
-# orbit/core/utils.py
+# orbitlab/core/utils.py
 
 import inspect
 from pathlib import Path
@@ -7,7 +7,7 @@ from collections import defaultdict
 from typing import Any, Optional, Literal, Dict
 
 try:
-    from orbit.logger import logger
+    from orbitlab.logger import logger
 except ImportError:
     import logging
     logging.basicConfig(level=logging.INFO)

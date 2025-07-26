@@ -1,8 +1,8 @@
-# Orbit 🛰️
+# OrbitLab 🛰️
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/) [![License: BSD-3-Clause](https://img.shields.io/badge/license-BSD--3--Clause-green.svg)](LICENSE) [![Status: Stable](https://img.shields.io/badge/status-stable-brightgreen.svg)]() [![Made with ♥](https://img.shields.io/badge/made%20with-%E2%99%A5-red.svg)]()
 
-**Orbit** es un motor avanzado para la ejecución segura de estructuras **.dill** en **Python**. Integra validación estructural, ejecución dinámica de funciones y clases, transformación del payload mediante mutaciones encadenadas, cacheo inteligente, cifrado híbrido (RSA + AES), firma digital, y un sistema de almacenamiento con versionado y rollback automático.
+**Orbit Lab** es un motor avanzado para la ejecución segura de estructuras **.dill** en **Python**. Integra validación estructural, ejecución dinámica de funciones y clases, transformación del payload mediante mutaciones encadenadas, cacheo inteligente, cifrado híbrido (RSA + AES), firma digital, y un sistema de almacenamiento con versionado y rollback automático.
 
 ---
 
@@ -20,10 +20,10 @@
 ## 📦 Estructura del Proyecto
 
 ```
-📦Orbit/
+📦orbitlab/
 ├── LICENSE
 ├── README.md
-├── orbit/
+├── orbitlab/
 │   ├── __init__.py
 │   ├── adapters/
 │   │   ├── __init__.py

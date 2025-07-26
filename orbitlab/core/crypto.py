@@ -1,4 +1,4 @@
-# orbit/core/crypto.py
+# orbitlab/core/crypto.py
 
 import json
 import hashlib
@@ -6,7 +6,7 @@ import bcrypt
 from pathlib import Path
 from typing import Dict, Any
 from Crypto.PublicKey import RSA
-from orbit.adapters.security import HybridSecurityAdapter
+from orbitlab.adapters.security import HybridSecurityAdapter
 
 # Instancia local del adaptador
 _adapter = HybridSecurityAdapter()

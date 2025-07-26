@@ -1,8 +1,8 @@
-# orbit/logger.py
+# orbitlab/logger.py
 import sys
 import logging
 import structlog
-from orbit.config import OrbitSettings
+from orbitlab.config import OrbitSettings
 
 settings = OrbitSettings()
 

@@ -6,7 +6,7 @@ from pathlib import Path
 from filelock import FileLock
 from typing import Any, List, Optional
 
-from orbit.core.crypto import firmar_dill, validar_firma, encrypt_hybrid, decrypt_hybrid
+from orbitlab.core.crypto import firmar_dill, validar_firma, encrypt_hybrid, decrypt_hybrid
 
 class TrackedDict(dict):
     def __init__(self, parent=None, key=None, *args, **kwargs):

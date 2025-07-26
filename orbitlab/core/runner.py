@@ -1,4 +1,4 @@
-# orbit/core/runner.py
+# orbitlab/core/runner.py
 
 import sys
 import dill
@@ -7,12 +7,12 @@ import importlib.util
 from pathlib import Path
 from typing import Optional, Callable, Dict, Any, Union, cast
 from io import StringIO
-from orbit.core.validator import OrbitValidator
-from orbit.core.cache import OrbitCache
-from orbit.adapters.base import BaseProjectAdapter
-from orbit.core.crypto import decrypt_hybrid, validar_firma
-from orbit.core.mutator import global_mutator  # 🔁 Cambio clave aquí
-from orbit.core.utils import log_message
+from orbitlab.core.validator import OrbitValidator
+from orbitlab.core.cache import OrbitCache
+from orbitlab.adapters.base import BaseProjectAdapter
+from orbitlab.core.crypto import decrypt_hybrid, validar_firma
+from orbitlab.core.mutator import global_mutator  # 🔁 Cambio clave aquí
+from orbitlab.core.utils import log_message
 
 class OrbitRunner:
     def __init__(

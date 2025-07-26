@@ -1,11 +1,11 @@
-# orbit/core/registry.py
+# orbitlab/core/registry.py
 
 import json
 import hashlib
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Dict, Any, List, Tuple
-from orbit.core.utils import log_message
+from orbitlab.core.utils import log_message
 
 class OrbitRegistry:
     """

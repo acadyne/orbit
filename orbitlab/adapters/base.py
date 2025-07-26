@@ -1,4 +1,4 @@
-# orbit/adapters/base.py
+# orbitlab/adapters/base.py
 import sys
 import importlib.util
 from pathlib import Path

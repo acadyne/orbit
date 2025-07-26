@@ -1,5 +1,5 @@
 [project]
-name = "orbit"
+name = "orbitlab"
 version = "0.1.0"
 description = "Motor extensible para ejecución segura, validación y versionado de payloads serializados (.dill)"
 authors = [

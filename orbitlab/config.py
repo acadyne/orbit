@@ -1,14 +1,14 @@
-# orbit/config.py
+# orbitlab/config.py
 from typing import Optional, Literal
 from pydantic_settings import BaseSettings
 
 class OrbitSettings(BaseSettings):
     """
-    Configuración por defecto de Orbit, usada si no se detectan settings externos.
+    Configuración por defecto de Orbit Lab, usada si no se detectan settings externos.
     Compatible con entornos personalizados.
     """
 
-    PROJECT_NAME: str = "orbit"
+    PROJECT_NAME: str = "Orbit Lab"
     PUBLIC_KEY: Optional[str] = ""
     PRIVATE_KEY: Optional[str] = ""
 
@@ -17,4 +17,4 @@ class OrbitSettings(BaseSettings):
     DEBUG_TO_FILE: Optional[bool] = False
     INFO_TO_CONSOLE: Optional[bool] = True
     INFO_TO_FILE: Optional[bool] = False
-    LOGS_DIR: str = "./logs/orbit.log"
+    LOGS_DIR: str = "./logs/orbitlab.log"

@@ -1,12 +1,12 @@
-# orbit/core/cache.py
+# orbitlab/core/cache.py
 import dill  # type: ignore
 import json
 import hashlib
 from pathlib import Path
 from typing import Any, Optional, Dict, cast
 
-from orbit.core.crypto import firmar_dill
-from orbit.core.utils import log_message
+from orbitlab.core.crypto import firmar_dill
+from orbitlab.core.utils import log_message
 
 
 class OrbitCache:
