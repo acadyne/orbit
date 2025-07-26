@@ -265,7 +265,7 @@ store.commit("params")
 ## ⚙️ Requisitos
 
 - Python 3.10+
-- `dill`, `filelock`, `cross-crypto-py`, `pycryptodome`, `bcrypt`, `pydantic-settings`
+- `dill`, `filelock`, `cross-crypto-py`, `pydantic-settings`
 
 ---
 
