@@ -15,7 +15,6 @@ class BaseProjectAdapter:
         self.settings = self._resolve_settings(custom_path)
 
     def _resolve_settings(self, custom_path: Optional[str]) -> Any:
-        # Usar variable de entorno si existe
         env_path = os.getenv("GLOBAL_IMPORTS_PATH")
         base_path = Path(env_path or custom_path or Path.cwd() / "global_imports.py")
 
@@ -25,6 +24,6 @@ class BaseProjectAdapter:
                 module = importlib.util.module_from_spec(spec)
                 sys.modules["global_imports"] = module
                 spec.loader.exec_module(module)
-                return getattr(module, "settings", {})  # Devuelve settings heredado o dict vacío
+                return getattr(module, "settings", {}) 
 
-        return {}  # Si no hay settings heredado
+        return {} 

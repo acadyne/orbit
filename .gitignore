@@ -145,4 +145,5 @@ poetry.lock
 *.log
 demos
 
-vento
+vento/
+dist/

@@ -19,9 +19,11 @@
 
 ## 📦 Estructura del Proyecto
 
-```
-📦orbitlab/
+```md
+📦orbit/
+├── .gitignore
 ├── LICENSE
+├── MANIFEST.in
 ├── README.md
 ├── orbitlab/
 │   ├── __init__.py
@@ -29,18 +31,18 @@
 │   │   ├── __init__.py
 │   │   ├── base.py
 │   │   └── security.py
-│   ├── config.py
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── cache.py
-│   │   ├── crypto.py
-│   │   ├── dynamic_store.py
-│   │   ├── mutator.py
-│   │   ├── registry.py
-│   │   ├── runner.py
-│   │   ├── utils.py
-│   │   └── validator.py
-│   └── logger.py
+│   └── core/
+│       ├── __init__.py
+│       ├── cache.py
+│       ├── config.py
+│       ├── crypto.py
+│       ├── dynamic_store.py
+│       ├── logger.py
+│       ├── mutator.py
+│       ├── registry.py
+│       ├── runner.py
+│       ├── utils.py
+│       └── validator.py
 └── pyproject.toml
 ```
 
@@ -50,14 +52,14 @@
 
 | Módulo                  | Descripción |
 |--------------------------|-------------|
-| `orbit.core.runner`      | Ejecuta `.dill` como scripts, funciones o clases. |
-| `orbit.core.mutator`     | Registra y aplica transformaciones al payload. |
-| `orbit.core.validator`   | Valida estructura del `.dill` antes de ejecutar. |
-| `orbit.core.crypto`      | Firma digital y cifrado híbrido. |
-| `orbit.core.dynamic_store` | Almacenamiento tipo base de datos con rollback/versionado. |
-| `orbit.core.cache`       | Mecanismo de cacheo basado en hash. |
-| `orbit.core.registry`       | Registro de versiones .dill con metadatos como autor, hash, timestamp y etiquetas. |
-| `orbit.core.validator`       | Valida firmas, claves mínimas del payload, y soporta validadores externos. |
+| `orbitlab.core.runner`      | Ejecuta `.dill` como scripts, funciones o clases. |
+| `orbitlab.core.mutator`     | Registra y aplica transformaciones al payload. |
+| `orbitlab.core.validator`   | Valida estructura del `.dill` antes de ejecutar. |
+| `orbitlab.core.crypto`      | Firma digital y cifrado híbrido. |
+| `orbitlab.core.dynamic_store` | Almacenamiento tipo base de datos con rollback/versionado. |
+| `orbitlab.core.cache`       | Mecanismo de cacheo basado en hash. |
+| `orbitlab.core.registry`       | Registro de versiones .dill con metadatos como autor, hash, timestamp y etiquetas. |
+| `orbitlab.core.validator`       | Valida firmas, claves mínimas del payload, y soporta validadores externos. |
 
 ---
 
@@ -68,21 +70,25 @@
 - 🔐 Desencriptado híbrido usando `cross-crypto-py`
 - 🚫 Bloqueo de ejecución si el archivo fue alterado
 
-
 ---
 
 ## 🧩 Ejemplos de uso con `OrbitRunner`
 
-### `Ejemplo 1`
+### `Ejemplo 1: Uso de OrbitRunner y firma`
+
 ```python
 import dill
+import os
 from pathlib import Path
-from orbit.core.crypto import firmar_dill
-from orbit.core.runner import OrbitRunner
+from orbitlab.core.crypto import firmar_dill
+from orbitlab.core.runner import OrbitRunner
 
-print("🚀 Test 0: Ejecución de función serializada con OrbitRunner")
+print("🚀 Test 1: Ejecución de función serializada con OrbitRunner")
 
-ruta = Path("mi_modelo.dill")
+# Directorio específico para este test
+base = Path("test1")
+base.mkdir(exist_ok=True)
+ruta = base / "mi_modelo.dill"
 
 def hola_mundo():
     return "👋 Hola desde OrbitRunner"
@@ -90,9 +96,9 @@ def hola_mundo():
 payload = {
     "payload": {
         "function": hola_mundo,
-        "folders": [],
+        "folders": [],  
         "archivos": [],
-        "code": "",  
+        "code": "",
     }
 }
 
@@ -103,17 +109,29 @@ firmar_dill(ruta)
 
 runner = OrbitRunner(str(ruta))
 runner.run()
-print("✅ Test 0 finalizado con ejecución directa exitosa")
+
+print("✅ Test 1 finalizado con ejecución directa exitosa")
+print("Archivos en", base, ":", os.listdir(base))
 ```
 
-### `Ejemplo 2 con una clase y mutaciones`
+### `Ejemplo 2: Una clase y mutaciones`
+
 ```python
 import dill
+import os
 from pathlib import Path
-from orbit.core.crypto import firmar_dill
-from orbit.core.runner import OrbitRunner, global_mutator
+from orbitlab.core.crypto import firmar_dill
+from orbitlab.core.runner import OrbitRunner
+from orbitlab.core import global_mutator
 
-print("🔧 Test 0C: Clase + método + mutaciones encadenadas")
+print("🔧 Test 2: Clase + método + mutaciones encadenadas + creación de carpetas")
+
+# Directorio específico para este test
+base = Path("test2")
+base.mkdir(exist_ok=True)
+ruta = base / "mi_modelo_mutado.dill"
+carpeta_obj = base / "saludos"
+archivo_obj = base / "bienvenida.txt"
 
 @global_mutator.register("inject_data")
 def inject_data(payload):
@@ -137,7 +155,6 @@ class Saludo:
         return f"🌟 Hola desde mutación, {self.quien}!"
 """
 
-ruta = Path("mi_modelo_mutado.dill")
 payload = {
     "payload": {
         "code": codigo,
@@ -146,98 +163,71 @@ payload = {
             "class_name": "Saludo",
             "methods": [{"name": "saludo"}]
         },
-        "folders": [],
-        "archivos": [],
+        # Ahora pedimos crear carpeta y archivo en base/
+        "folders": [str(carpeta_obj)],
+        "archivos": [
+            {"path": str(archivo_obj), "content": "¡Hola!"}
+        ],
     }
 }
 
 with ruta.open("wb") as f:
     dill.dump(payload, f)
+
 firmar_dill(ruta)
 
-runner = OrbitRunner(str(ruta), mutation_filter=["inject_data", "normalize_data"])
-runner.run("saludo")
-print("✅ Test 0C finalizado con mutaciones aplicadas antes de ejecutar método")
-```
-
-### `Ejemplo 3 con una clase y mutaciones y encriptación`
-```python
-import dill
-from pathlib import Path
-from cross_crypto_py.keygen import generateRSAKeys
-from orbit.core.crypto import encrypt_hybrid, firmar_dill, _adapter
-from orbit.core.runner import OrbitRunner, global_mutator
-from orbit.config import OrbitSettings
-
-print("🔐 Test 0D: Clase + mutaciones + ejecución desde .dill cifrado")
-
-keys = generateRSAKeys()
-_adapter.settings = OrbitSettings(
-    PUBLIC_KEY=keys["publicKey"],
-    PRIVATE_KEY=keys["privateKey"]
+runner = OrbitRunner(
+    str(ruta),
+    mutation_filter=["inject_data", "normalize_data"]
 )
+runner.run("saludo")
 
-code = """
-class Usuario:
-    def __init__(self, data):
-        self.nombre = data.get("nombre", "anon")
-
-    def saluda(self):
-        return f"👋 ¡Hola desde archivo cifrado, {self.nombre}!"
-"""
-
-payload = {
-    "code": code,
-    "data": {},
-    "expose": {
-        "class_name": "Usuario",
-        "methods": [{"name": "saluda"}]
-    },
-    "folders": [],
-    "archivos": []
-}
-
-encrypted_payload = {
-    "secure": True,
-    "encrypted": encrypt_hybrid(payload)
-}
-
-ruta = Path("test_0D_secure/entrada/mi_modelo_cifrado.dill")
-ruta.parent.mkdir(parents=True, exist_ok=True)
-with ruta.open("wb") as f:
-    dill.dump(encrypted_payload, f)
-firmar_dill(ruta)
-
-@global_mutator.register("inject_name")
-def inject_name(payload):
-    print("🔧 inject_name aplicado")
-    payload.setdefault("data", {})["nombre"] = "Zerina"
-    return payload
-
-@global_mutator.register("to_uppercase")
-def to_uppercase(payload):
-    print("🔧 to_uppercase aplicado")
-    if "data" in payload and "nombre" in payload["data"]:
-        payload["data"]["nombre"] = payload["data"]["nombre"].upper()
-    return payload
-
-print("🚀 Ejecutando OrbitRunner sobre archivo cifrado con mutaciones...")
-runner = OrbitRunner(str(ruta), mutation_filter=["inject_name", "to_uppercase"])
-runner.run(method_name="saluda")
-print("✅ Test 0D completado con cifrado, mutaciones y ejecución de clase")
+print("✅ Test 2 finalizado con mutaciones y creación de:", os.listdir(base))
+print("· Carpeta 'saludos' existe?", carpeta_obj.is_dir())
+print("· Archivo 'bienvenida.txt' existe?", archivo_obj.is_file())
 ```
-
 
 ---
 
-## 🧠 Uso con DynamicDillStore
+### `Ejemplo 3: Uso con DynamicDillStore` 🧠
 
 ```python
-from orbit.core.dynamic_store import DynamicDillStore
+import os
+from pathlib import Path
+from orbitlab.core.dynamic_store import DynamicDillStore
 
-store = DynamicDillStore("config.dill", auto_commit_interval=2.0)
-store.set("params", {"lr": 0.01, "arch": [64, 128]})
+print("📦 Test 3: DynamicDillStore commit y rollback")
+
+# Definimos un directorio y fichero de entrada
+base_dir = Path("test3_commit_rollback/entrada")
+base_dir.mkdir(parents=True, exist_ok=True)
+path = base_dir / "data.dill"
+
+# Crear store (auto_save creará data.dill)
+store = DynamicDillStore(str(path), auto_save=True)
+print("Store inicializado, existe?", path.exists())
+
+# Setear y commitear valores iniciales
+store.set("params", {"a": 1, "b": 2})
+print("📝 Valores iniciales guardados:", store.get("params"))
+
 store.commit("params")
+versions_dir = Path(str(path) + ".versions")
+print("🔐 Commit realizado, versiones:", os.listdir(versions_dir))
+
+# Hacemos un cambio y otro commit
+store.set("params", {"a": 2, "b": 3})
+store.commit("params")
+print("🔐 Segundo commit, versiones:", os.listdir(versions_dir))
+
+# Listar history y rollback a la primera versión
+history = store.history("params")
+print("🕒 History timestamps:", history)
+first_ts = history[0]
+
+store.rollback("params", first_ts)
+print("↩️ Rollback a", first_ts, "->", store.get("params"))
+
 ```
 
 ---
@@ -247,9 +237,9 @@ store.commit("params")
 ```python
 {
   "payload": {
-    "code": "...",  # Código fuente
-    "function": ...,  # (opcional) función serializada
-    "data": {...},    # diccionario con datos
+    "code": "...",  
+    "function": ..., 
+    "data": {...},  
     "expose": {
       "class_name": "MyClass",
       "methods": [{"name": "do"}]

@@ -4,7 +4,6 @@ import json
 import hashlib
 from pathlib import Path
 from typing import Any, Optional, Dict, cast
-
 from orbitlab.core.crypto import firmar_dill
 from orbitlab.core.utils import log_message
 
